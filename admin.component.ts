@@ -19,6 +19,9 @@ export class AdminComponent implements OnInit {
   tempClaims: Claim[] =[] ;
   allCustomer: Customer[] = [] ; // gloal variable available to all other methods + html
   tempCustomer: Customer[] =[] ;
+  claim:Claim = new Claim();
+  fetchedId:number;
+
 
   constructor(private adminService: AdminService) { }
 
@@ -44,18 +47,33 @@ export class AdminComponent implements OnInit {
     ); // invocation of the subscribe method
   }
 
-  // loadAllCustomer() {
-  //   console.log('Load all customer');
-  //   this.adminService.findAllCustomerService().subscribe(
-  //     (data: Customer[])=> 
-  //     {
-  //       this.allCustomer = data;
-  //       this.tempCustomer = data; //copied into a temp array also
-  //     }, 
-  //     (err) => {
-  //       console.log(err);
-  //     }
-  //   ); // invocation of the subscribe method
-  // }
+  updateStatus(Claim) {
+    this.adminService.updateStatus(this.claim)
+      .subscribe(data => {
+        console.log(data);
+        
+        
+      }, error=>
+      {
+        console.log("Exception occured.")
+      }
+       );
+
+  }
+  onSubmit(event:any){
+    this.fetchedId = 
+ Number(event.target.attributes.id.value);
+console.log(this.fetchedId);
+    console.log(this.allClaims);
+    for (let index = 0; index < this.allClaims.length; index++) {
+      if(this.allClaims["claimId"]==this.fetchedId){
+        this.claim = this.allClaims[index];
+        this.claim.claimApprovalstatus=-1;
+
+      }
+      
+    }
+    this.updateStatus(this.claim);
+  }
 
 }
